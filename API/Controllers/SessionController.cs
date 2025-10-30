@@ -10,6 +10,9 @@ public class SessionController : Controller
     {
         if (request == null || request.durationSec <= 0 || request.durationSec > long.MaxValue)
             return BadRequest(new { error = "Invalid durationSec" });
+        
+        if(Session.users.Where(x => x.sessionId == request.sessionId).Count() > 0)
+            return BadRequest(new { error = "Session ID already in use" });
 
         if (request.sessionId == null || request.sessionId == string.Empty)
             request.sessionId = Guid.NewGuid().ToString();
